@@ -1,0 +1,52 @@
+{
+  "name": "Org_DXComponent_TwoColumnView",
+  "label": "Two column view",
+  "description": "Form template that displays two authored view regions side by side.",
+  "organization": "Org",
+  "version": "1.0.0",
+  "library": "DXComponents",
+  "allowedApplications": [],
+  "componentKey": "Org_DXComponent_TwoColumnView",
+  "type": "Template",
+  "subtype": "FORM",
+  "icon": "TwoColumn.svg",
+  "properties": [
+    {
+      "name": "A",
+      "label": "Left view",
+      "format": "CONTENTPICKER",
+      "addTypeList": ["Views"]
+    },
+    {
+      "name": "B",
+      "label": "Right view",
+      "format": "CONTENTPICKER",
+      "addTypeList": ["Views"]
+    },
+    {
+      "label": "Conditions",
+      "format": "GROUP",
+      "properties": [
+        {
+          "name": "required",
+          "label": "Required",
+          "format": "REQUIRED",
+          "saveToReference": true
+        },
+        {
+          "name": "disabled",
+          "label": "Disabled",
+          "format": "DISABLED",
+          "saveToReference": true
+        },
+        {
+          "name": "visibility",
+          "label": "Visibility",
+          "format": "VISIBILITY",
+          "saveToReference": true
+        }
+      ]
+    }
+  ],
+  "defaultConfig": {}
+}

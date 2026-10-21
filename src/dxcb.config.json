@@ -1,0 +1,7 @@
+{
+  "sdkType": "SDK-React",
+  "library": "DXComponents",
+  "organization": "Org",
+  "rulesetName": "CustomDX",
+  "rulesetVersion": "01-01-01"
+}

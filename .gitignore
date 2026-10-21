@@ -1,0 +1,50 @@
+# Dependencies & build output
+node_modules
+dist
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+.vite
+
+# Pega ConstellationJS engine (copied from node_modules on install; Pega-licensed)
+public/constellation/
+
+# Local configuration & secrets - never commit real values
+.env
+.env.*
+!.env.example
+sdk-config.json
+!sdk-config.example.json
+keys/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Android / Capacitor build artefacts
+*.apk
+*.aab
+android/app/release/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/app/src/main/assets/public
+android/capacitor-cordova-android-plugins/
+
+# Logs & tooling
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+vite-dev.*.log
+webapp-logs
+playwright-report/
+test-results/
+.claude/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store

@@ -1,0 +1,395 @@
+swagger: "2.0"
+info:
+  title: PolicyQuestion Agent API
+  version: "1.0.0"
+  description: |
+    Swagger 2.0 contract for the Pega PolicyQuestion agent used by the starter portal.
+
+    This file is intentionally Swagger/OpenAPI 2.0 because Azure API Management import
+    with API version 2019-01-01 commonly validates against the OpenAPI 2.0 schema.
+
+    The Pega Agent2Agent agent card advertises text/plain input and text/plain output.
+    The React portal also uses Pega DX application/v2 endpoints to upload attachments
+    and send JSON conversation messages.
+host: your-pega-host.example.com
+basePath: /prweb/PRAuth/app/insurehub/api
+schemes:
+  - https
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Use: Bearer <OAuth access token>"
+security:
+  - bearerAuth: []
+tags:
+  - name: Agent metadata
+  - name: Agent execution
+  - name: Attachments
+  - name: DX Agent conversation
+paths:
+  /agent2agent/v1/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/.well-known/agent.json:
+    get:
+      tags:
+        - Agent metadata
+      summary: Get PolicyQuestion agent card
+      description: Returns the Agent2Agent metadata published by Pega for the PolicyQuestion agent.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Agent card.
+          schema:
+            $ref: "#/definitions/AgentCard"
+          examples:
+            application/json:
+              name: PolicyQuestion
+              description: Policy chat agent
+              version: "1.0.0"
+              url: https://your-pega-host.example.com/prweb/PRAuth/app/insurehub/api/agent2agent/v1/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/execute
+              defaultInputModes:
+                - text/plain
+              defaultOutputModes:
+                - text/plain
+              capabilities:
+                streaming: "false"
+                pushNotifications: "false"
+                stateTransitionHistory: "false"
+        "401":
+          description: Missing or invalid bearer token.
+
+  /agent2agent/v1/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/execute:
+    post:
+      tags:
+        - Agent execution
+      summary: Execute PolicyQuestion agent
+      description: |
+        Executes the Agent2Agent PolicyQuestion agent.
+
+        The discovered agent card reports text/plain input and text/plain output. The text request
+        should include the business parameters the Pega tools expect: CustomerID, PolicyID,
+        Document, DocumentID, DocumentURL, optional uploaded attachment references, and
+        ChatQuestionPrompt.
+      consumes:
+        - text/plain
+      produces:
+        - text/plain
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: string
+          x-ms-summary: Agent request text
+          description: |
+            Example:
+
+            What is my death benefit in this policy?
+
+            Use the following tool parameters for this policy question:
+            CustomerID: CUST847562
+            PolicyID: POL-MOTOR-10001
+            Document: https://your-storage-account.blob.core.windows.net/policy-documents/Auto_Policy.pdf
+            DocumentID: Auto_Policy.pdf
+            DocumentURL: https://your-storage-account.blob.core.windows.net/policy-documents/Auto_Policy.pdf
+            ChatQuestionPrompt: What is my death benefit in this policy?
+      responses:
+        "200":
+          description: Agent response text.
+          schema:
+            type: string
+          examples:
+            text/plain: Your policy includes motor accident damage coverage subject to the deductible and policy limits.
+        "400":
+          description: Invalid request.
+        "401":
+          description: Missing or invalid bearer token.
+        "500":
+          description: Agent execution failed.
+
+  /application/v2/attachments/upload:
+    post:
+      tags:
+        - Attachments
+      summary: Upload attachment for later agent or case use
+      description: Uploads a file to Pega storage and returns an attachment ID.
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: file
+          in: formData
+          required: true
+          type: file
+          description: File selected by the customer.
+      responses:
+        "201":
+          description: Uploaded attachment ID.
+          schema:
+            $ref: "#/definitions/UploadAttachmentResponse"
+          examples:
+            application/json:
+              ID: ATTACH-WORK-12345
+        "400":
+          description: Upload failed.
+        "401":
+          description: Missing or invalid bearer token.
+
+  /application/v2/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/conversations:
+    post:
+      tags:
+        - DX Agent conversation
+      summary: Start DX agent conversation
+      description: Starts a DX application/v2 conversation used by the React chat UI.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/StartConversationRequest"
+      responses:
+        "200":
+          description: Conversation created.
+          schema:
+            $ref: "#/definitions/StartConversationResponse"
+          examples:
+            application/json:
+              conversationID: CONV-12345
+        "401":
+          description: Missing or invalid bearer token.
+
+  /application/v2/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/conversations/{conversationID}:
+    patch:
+      tags:
+        - DX Agent conversation
+      summary: Send message to DX agent conversation
+      description: |
+        Sends a message to the DX application/v2 agent conversation. This is the JSON shape used
+        by the React portal when passing attachment IDs returned by /attachments/upload.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - text/event-stream
+      parameters:
+        - name: conversationID
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/AgentConversationMessageRequest"
+      responses:
+        "200":
+          description: Agent message response.
+          schema:
+            $ref: "#/definitions/AgentConversationMessageResponse"
+          examples:
+            application/json:
+              response: I can help submit a motor claim. I found your policy and attached proof reference.
+              messageID: MSG-12345
+        "400":
+          description: Invalid request.
+        "401":
+          description: Missing or invalid bearer token.
+
+definitions:
+  AgentCard:
+    type: object
+    required:
+      - name
+      - description
+      - version
+      - url
+      - defaultInputModes
+      - defaultOutputModes
+      - capabilities
+      - skills
+    properties:
+      name:
+        type: string
+        example: PolicyQuestion
+      description:
+        type: string
+        example: Policy chat agent
+      version:
+        type: string
+        example: "1.0.0"
+      url:
+        type: string
+        format: uri
+      defaultInputModes:
+        type: array
+        items:
+          type: string
+        example:
+          - text/plain
+      defaultOutputModes:
+        type: array
+        items:
+          type: string
+        example:
+          - text/plain
+      capabilities:
+        $ref: "#/definitions/AgentCapabilities"
+      skills:
+        type: array
+        items:
+          $ref: "#/definitions/AgentSkill"
+
+  AgentCapabilities:
+    type: object
+    properties:
+      streaming:
+        type: string
+        example: "false"
+      pushNotifications:
+        type: string
+        example: "false"
+      stateTransitionHistory:
+        type: string
+        example: "false"
+      extensions:
+        type: array
+        items:
+          $ref: "#/definitions/AgentExtension"
+
+  AgentExtension:
+    type: object
+    properties:
+      uri:
+        type: string
+        example: tool://IH-Insure-Work-PolicyClarification!GetPolicyData
+      required:
+        type: string
+        example: "false"
+      params:
+        type: object
+        additionalProperties:
+          type: string
+
+  AgentSkill:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      examples:
+        type: array
+        items:
+          type: string
+      tags:
+        type: array
+        items:
+          type: string
+
+  StartConversationRequest:
+    type: object
+    properties:
+      executeStarterQuestion:
+        type: boolean
+        example: false
+      interactionID:
+        type: string
+        example: portal-1782648000000
+
+  StartConversationResponse:
+    type: object
+    properties:
+      conversationID:
+        type: string
+      ID:
+        type: string
+      conversationId:
+        type: string
+
+  AgentConversationMessageRequest:
+    type: object
+    required:
+      - Request
+    properties:
+      Request:
+        type: string
+        description: Agent prompt plus business parameters.
+        example: |
+          I want to submit a motor claim for damage to my car. I attached proof.
+
+          Use the following tool parameters for this policy question:
+          CustomerID: CUST847562
+          PolicyID: POL-MOTOR-10001
+          Document: https://your-storage-account.blob.core.windows.net/policy-documents/Auto_Policy.pdf
+          DocumentID: Auto_Policy.pdf
+          DocumentURL: https://your-storage-account.blob.core.windows.net/policy-documents/Auto_Policy.pdf
+          Attachments:
+          - damage-photo.jpg (File) ID: ATTACH-WORK-12345
+          ChatQuestionPrompt: I want to submit a motor claim for damage to my car. I attached proof.
+      Attachments:
+        type: array
+        items:
+          $ref: "#/definitions/AgentAttachment"
+      capabilities:
+        $ref: "#/definitions/AgentCapabilitiesRequest"
+
+  AgentCapabilitiesRequest:
+    type: object
+    properties:
+      stream:
+        type: object
+        properties:
+          isEnabled:
+            type: boolean
+            example: true
+
+  AgentAttachment:
+    type: object
+    required:
+      - ID
+      - name
+      - type
+    properties:
+      ID:
+        type: string
+        description: Attachment ID returned by /attachments/upload.
+        example: ATTACH-WORK-12345
+      name:
+        type: string
+        example: damage-photo.jpg
+      type:
+        type: string
+        enum:
+          - File
+        example: File
+      category:
+        type: string
+        description: Pega attachment category. For motor claim proof use ClaimProof.
+        example: ClaimProof
+
+  UploadAttachmentResponse:
+    type: object
+    properties:
+      ID:
+        type: string
+        example: ATTACH-WORK-12345
+
+  AgentConversationMessageResponse:
+    type: object
+    properties:
+      response:
+        type: string
+      messageID:
+        type: string
+      aiGuidedQuestions:
+        type: array
+        items:
+          type: string

@@ -1,0 +1,156 @@
+{
+    "skills":  [
+                   {
+                       "examples":  [
+                                        "Get the latest active case for [xxxx]",
+                                        "Find all in [xxxx]",
+                                        "List open [yyyy] in [xxxx]",
+                                        "Show relationship between [yyyy] and its [xxxx]"
+                                    ],
+                       "name":  "MotorClaimCaseCreationTool",
+                       "description":  "This tool enables customers to submit motor insurance claims for vehicle-related incidents. It facilitates the entire claims submission process by allowing users to report accidents, damage, or other motor-related incidents, provide necessary details about the claim, upload supporting documentation, and track their claim status through the workflow. The tool streamlines the claims process by collecting all required information in a structured manner and routing it through the appropriate approval and processing channels. Set the \"CustomerID\" value to \"SelectCustomerName\" property and PolicyID to \"SelectedPolicyID\" property. Also attach ClaimProof attachments if present to ClaimProof attachment category",
+                       "id":  "@baseclass!MotorClaimCaseCreationTool",
+                       "tags":  [
+                                    "motor insurance",
+                                    "claim submission",
+                                    "vehicle incidents",
+                                    "documentation upload",
+                                    "claim tracking"
+                                ]
+                   },
+                   {
+                       "examples":  [
+                                        "I need to file a motor insurance claim for my car accident that happened yesterday",
+                                        "How do I submit a claim for vehicle damage from a collision?",
+                                        "Can I report a motor claim and upload photos of the damage?",
+                                        "I want to initiate a new motor claims request for my damaged vehicle",
+                                        "Help me submit a motor insurance claim with all the incident details",
+                                        "Where can I file a motor claim and track its status?"
+                                    ],
+                       "name":  "Motor Claims",
+                       "description":  "This tool enables customers to submit motor insurance claims for vehicle-related incidents. It facilitates the entire claims submission process by allowing users to report accidents, damage, or other motor-related incidents, provide necessary details about the claim, upload supporting documentation, and track their claim status through the workflow. The tool streamlines the claims process by collecting all required information in a structured manner and routing it through the appropriate approval and processing channels. Set the \"CustomerID\" value to \"SelectCustomerName\" property and PolicyID to \"SelectedPolicyID\" property. Also attach ClaimProof attachments if present to ClaimProof attachment category",
+                       "id":  "@baseclass!MotorClaimsSubmission",
+                       "tags":  [
+                                    "motor claims",
+                                    "accident reporting",
+                                    "vehicle damage",
+                                    "insurance claim",
+                                    "claim filing"
+                                ]
+                   },
+                   {
+                       "examples":  [
+                                        "Whats my death benefit in  my policy"
+                                    ],
+                       "name":  "GetPolicyData",
+                       "description":  "You are the tool to get policy data from external policy system",
+                       "id":  "IH-Insure-Work-PolicyClarification!GetPolicyData",
+                       "tags":  [
+                                    "policy information",
+                                    "policy details",
+                                    "benefits",
+                                    "policy data",
+                                    "insurance coverage"
+                                ]
+                   },
+                   {
+                       "examples":  [
+                                        "List next available slots"
+                                    ],
+                       "name":  "GetCalenderData",
+                       "description":  "You as a tool. will connect to externakl azure agent via data page to get the available slots",
+                       "id":  "IH-Insure-Work!GetCalenderData",
+                       "tags":  [
+                                    "appointment scheduling",
+                                    "available slots",
+                                    "calendar management",
+                                    "booking",
+                                    "time slots"
+                                ]
+                   },
+                   {
+                       "examples":  [
+                                        "Default"
+                                    ],
+                       "name":  "MotorClaimEvents",
+                       "description":  "This will give all the motor claim events using the data page",
+                       "id":  "IH-Insure-Work-PolicyClarification!MotorClaimEvents",
+                       "tags":  [
+                                    "claim events",
+                                    "motor claims",
+                                    "claim history",
+                                    "event tracking",
+                                    "claim status"
+                                ]
+                   }
+               ],
+    "capabilities":  {
+                         "extensions":  [
+                                            {
+                                                "params":  {
+                                                               "name":  "MotorClaimCaseCreationTool",
+                                                               "id":  "@baseclass!MotorClaimCaseCreationTool",
+                                                               "category":  "Rule-AI-Agent"
+                                                           },
+                                                "uri":  "tool://@baseclass!MotorClaimCaseCreationTool",
+                                                "required":  "false"
+                                            },
+                                            {
+                                                "params":  {
+                                                               "name":  "Motor Claims",
+                                                               "id":  "@baseclass!MotorClaimsSubmission",
+                                                               "category":  "Rule-Obj-CaseType"
+                                                           },
+                                                "uri":  "tool://@baseclass!MotorClaimsSubmission",
+                                                "required":  "false"
+                                            },
+                                            {
+                                                "params":  {
+                                                               "name":  "GetPolicyData",
+                                                               "id":  "IH-Insure-Work-PolicyClarification!GetPolicyData",
+                                                               "category":  "Rule-Declare-Pages"
+                                                           },
+                                                "uri":  "tool://IH-Insure-Work-PolicyClarification!GetPolicyData",
+                                                "required":  "false"
+                                            },
+                                            {
+                                                "params":  {
+                                                               "name":  "GetCalenderData",
+                                                               "id":  "IH-Insure-Work!GetCalenderData",
+                                                               "category":  "Rule-Declare-Pages"
+                                                           },
+                                                "uri":  "tool://IH-Insure-Work!GetCalenderData",
+                                                "required":  "false"
+                                            },
+                                            {
+                                                "params":  {
+                                                               "name":  "MotorClaimEvents",
+                                                               "id":  "IH-Insure-Work-PolicyClarification!MotorClaimEvents",
+                                                               "category":  "Rule-Declare-Pages"
+                                                           },
+                                                "uri":  "tool://IH-Insure-Work-PolicyClarification!MotorClaimEvents",
+                                                "required":  "false"
+                                            },
+                                            {
+                                                "params":  {
+                                                               "name":  "Pega-Default-Smart(Claude-Sonnet-4-6)"
+                                                           },
+                                                "uri":  "model://modelName",
+                                                "required":  "false"
+                                            }
+                                        ],
+                         "streaming":  "false",
+                         "pushNotifications":  "false",
+                         "stateTransitionHistory":  "false"
+                     },
+    "defaultOutputModes":  [
+                               "text/plain"
+                           ],
+    "name":  "PolicyQuestion",
+    "description":  "Policy chat agent",
+    "version":  "1.0.0",
+    "defaultInputModes":  [
+                              "text/plain"
+                          ],
+    "url":  "https://your-pega-host.example.com/prweb/PRAuth/app/insurehub/api/agent2agent/v1/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/execute"
+}

@@ -1,0 +1,62 @@
+{
+  "authConfig": {
+    "authService": "pega",
+    "mashupClientId": "<YOUR_PEGA_OAUTH_CLIENT_ID>",
+    "mashupUserIdentifier": "",
+    "mashupPassword": "",
+    "mashupGrantType": "clientCreds",
+    "mashupClientSecret": "<YOUR_PEGA_OAUTH_CLIENT_SECRET>",
+    "portalGrantType": "clientCreds",
+    "portalClientId": "<YOUR_PEGA_OAUTH_CLIENT_ID>",
+    "portalClientSecret": "<YOUR_PEGA_OAUTH_CLIENT_SECRET>",
+    "clientId": "<YOUR_PEGA_OAUTH_CLIENT_ID>",
+    "clientSecret": "<YOUR_PEGA_OAUTH_CLIENT_SECRET>"
+  },
+  "serverConfig": {
+    "apiServer": "https://<your-pega-host>/prweb/PRAuth",
+    "infinityRestServerUrl": "https://<your-pega-host>/prweb",
+    "appAlias": "<your-app-alias>",
+    "sdkContentServerUrl": "",
+    "appPortal": "",
+    "appMashupCaseType": "",
+    "excludePortals": [
+      "pxExpress",
+      "Developer",
+      "pxPredictionStudio",
+      "pxAdminStudio",
+      "pyCaseWorker",
+      "pyCaseManager7"
+    ]
+  },
+  "dxcbConfig": {
+    "publishAccess": {
+      "serverUrl": "https://<your-pega-host>/prweb",
+      "rulesetName": "CustomDX",
+      "rulesetVersion": "01-01-01",
+      "sourceOfComponents": "Server",
+      "devBuild": false,
+      "clientId": "<YOUR_DXCB_OAUTH_CLIENT_ID>",
+      "clientSecret": "<YOUR_DXCB_OAUTH_CLIENT_SECRET>",
+      "grantType": "clientCreds",
+      "redirectUri": "https://localhost:4010/",
+      "cert": "./keys/sdk-r.crt",
+      "key": "./keys/sdk-r.key",
+      "user": "",
+      "password": ""
+    },
+    "componentDefaults": {
+      "organization": "Org",
+      "library": "DXComponents",
+      "version": "0.0.1",
+      "type": "Field",
+      "subtype": "Text",
+      "description": "Custom DX components",
+      "icon": "",
+      "lintAction": "off"
+    },
+    "componentTemplates": {
+      "customTemplatesPath": "",
+      "overrideTemplatesPath": ""
+    }
+  }
+}

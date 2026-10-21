@@ -1,0 +1,127 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Pega PolicyQuestion",
+    "version": "1.0.0",
+    "description": "Copilot-facing Swagger 2.0 contract for the Pega PolicyQuestion agent. This schema exposes business inputs only; the custom connector Code step must transform them into the Pega Agent2Agent message body."
+  },
+  "host": "your-pega-host.example.com",
+  "basePath": "/prweb/PRAuth/app/insurehub/api/application/v2",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Use: Bearer <OAuth access token>"
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/ai-agents/IH-INSURE-WORK-POLICYCLARIFICATION!POLICYQUESTION/conversations": {
+      "post": {
+        "operationId": "invokePolicyQuestion",
+        "summary": "Invoke PolicyQuestion Agent",
+        "description": "Sends a customer policy question to the Pega PolicyQuestion agent. The custom connector Code step starts a DX agent conversation and then sends the question to that conversation.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Customer policy question context.",
+            "schema": {
+              "$ref": "#/definitions/PolicyQuestionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Agent response returned by Pega.",
+            "schema": {
+              "$ref": "#/definitions/PolicyQuestionResponse"
+            }
+          },
+          "400": {
+            "description": "The request was invalid or missing required business context."
+          },
+          "401": {
+            "description": "The bearer token is missing, expired, or invalid."
+          },
+          "500": {
+            "description": "The Pega agent failed while processing the request."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PolicyQuestionRequest": {
+      "type": "object",
+      "required": [
+        "question",
+        "customerId",
+        "policyId",
+        "documentUrl"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "title": "Question",
+          "description": "The customer's policy question.",
+          "example": "What is covered if my bumper is damaged?"
+        },
+        "customerId": {
+          "type": "string",
+          "title": "Customer ID",
+          "description": "Logged-in customer ID from the React portal.",
+          "example": "CUST847562"
+        },
+        "policyId": {
+          "type": "string",
+          "title": "Policy ID",
+          "description": "Policy identifier selected by the customer.",
+          "example": "Policy006"
+        },
+        "documentId": {
+          "type": "string",
+          "title": "Document ID",
+          "description": "Optional policy document identifier or file name.",
+          "example": "Motor_Claims_Policy.pdf"
+        },
+        "documentUrl": {
+          "type": "string",
+          "title": "Document URL",
+          "description": "Direct URL for the policy document.",
+          "example": "https://your-storage-account.blob.core.windows.net/policy-documents/Motor_Claims_Policy.pdf"
+        }
+      }
+    },
+    "PolicyQuestionResponse": {
+      "type": "object",
+      "properties": {
+        "output": {
+          "type": "string",
+          "title": "Answer",
+          "description": "Answer returned by the Pega PolicyQuestion agent."
+        },
+        "raw": {
+          "type": "object",
+          "description": "Raw Pega response for troubleshooting.",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

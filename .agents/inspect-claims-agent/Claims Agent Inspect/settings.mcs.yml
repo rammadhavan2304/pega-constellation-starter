@@ -1,0 +1,22 @@
+displayName: Claims Agent
+schemaName: cr64e_ClaimsAgent
+accessControlPolicy: GroupMembership
+authenticationMode: Integrated
+authenticationTrigger: Always
+configuration:
+  settings:
+    GenerativeActionsEnabled: false
+
+  isAgentConnectable: false
+  gPTSettings:
+    defaultSchemaName: cr64e_ClaimsAgent.gpt.default
+
+  aISettings:
+    useModelKnowledge: false
+    isFileAnalysisEnabled: false
+    isSemanticSearchEnabled: false
+    contentModeration: Low
+    optInUseLatestModels: false
+
+template: o365LicenseRestrictedAgent-1.0.0
+language: 1033

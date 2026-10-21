@@ -1,0 +1,45 @@
+{
+  "properties": {
+    "connectionParameters": {
+      "token": {
+        "type": "oauthSetting",
+        "oAuthSettings": {
+          "identityProvider": "oauth2generic",
+          "clientId": "REPLACE_ME_CLIENT_ID",
+          "scopes": [],
+          "redirectMode": "Global",
+          "redirectUrl": "https://global.consent.azure-apim.net/redirect",
+          "properties": {
+            "IsFirstParty": "False",
+            "IsOnbehalfofLoginSupported": false
+          },
+          "customParameters": {
+            "authorizationUrlTemplate": {
+              "value": "https://your-pega-host.example.com/prweb/PRRestService/oauth2/v1/authorize"
+            },
+            "authorizationUrlQueryStringTemplate": {
+              "value": "?client_id={ClientId}&response_type=code&redirect_uri={RedirectUrl}&state={State}"
+            },
+            "tokenUrlTemplate": {
+              "value": "https://your-pega-host.example.com/prweb/PRRestService/oauth2/v1/token"
+            },
+            "tokenBodyTemplate": {
+              "value": "client_id={ClientId}&client_secret={ClientSecret}&code={Code}&redirect_uri={RedirectUrl}&grant_type=authorization_code"
+            },
+            "refreshUrlTemplate": {
+              "value": "https://your-pega-host.example.com/prweb/PRRestService/oauth2/v1/token"
+            },
+            "refreshBodyTemplate": {
+              "value": "client_id={ClientId}&client_secret={ClientSecret}&refresh_token={RefreshToken}&grant_type=refresh_token"
+            }
+          }
+        }
+      }
+    },
+    "iconBrandColor": "#004B8D",
+    "capabilities": [],
+    "scriptOperations": null,
+    "publisher": "",
+    "stackOwner": ""
+  }
+}
